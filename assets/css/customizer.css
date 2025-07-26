@@ -1,0 +1,304 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+#customize-controls{
+    overflow-y: auto !important;
+    font-family: "DM Sans", sans-serif !important;
+    scrollbar-width: thin;
+}
+
+/* Apply a custom font to Customizer headings and labels */
+/* #customize-controls .customize-section-title,
+#customize-controls .customize-pane-parent,
+#customize-controls .customize-control-title,
+#customize-controls .customize-control-description,
+#customize-controls .accordion-section-title {
+    font-family: 'Inter', sans-serif !important;
+} */
+
+#customize-theme-controls .control-section.open{
+    height: 100%;
+    padding: 12px 24px 25px 24px;
+    scrollbar-width: thin;
+}
+
+.customize-section-title{
+    margin: -12px -24px 0 -24px;
+}
+.novacraft-typography-control {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.novacraft-typography-button {
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.novacraft-typography-button:hover {
+    background: #f0f0f0;
+}
+
+.novacraft-typography-popup {
+    position: fixed;
+    top: auto;
+    left: 300px; /* Width of the customizer sidebar */
+    width: 300px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999999;
+    border: 1px solid #ddd;
+    max-height: calc(100vh - 100px); /* Leave some space at top and bottom */
+    overflow-y: auto;
+    transform: translateY(-50%);
+}
+
+.novacraft-typography-field {
+    margin-bottom: 15px;
+}
+
+.novacraft-typography-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.novacraft-typography-select,
+.novacraft-typography-number {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.novacraft-typography-popup-overlay {
+    display: none;
+}
+
+/* Range Number Control */
+.range-number-control {
+    margin-bottom: 15px;
+}
+
+.range-number-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+    position: relative;
+}
+
+.range-number-wrapper input[type="range"] {
+    flex: 1;
+    margin: 0;
+}
+
+.range-number-wrapper input[type="number"] {
+    width: 70px;
+    margin: 0;
+    padding: 3px 25px 3px 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    text-align: center;
+    position: relative;
+}
+
+/* Show number input spinners */
+.range-number-wrapper input[type="number"]::-webkit-inner-spin-button,
+.range-number-wrapper input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: inner-spin-button !important;
+    opacity: 1 !important;
+    background: #fff !important;
+    border-left: 1px solid #ddd;
+    border-radius: 0 3px 3px 0;
+    box-shadow: none;
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    margin: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+}
+
+/* Firefox */
+.range-number-wrapper input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Custom spinner arrows */
+.range-number-wrapper {
+    position: relative;
+}
+
+.range-number-wrapper::before {
+    content: "▲";
+    position: absolute;
+    right: 8px;
+    top: 3px;
+    font-size: 8px;
+    color: #666;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.range-number-wrapper::after {
+    content: "▼";
+    position: absolute;
+    right: 8px;
+    bottom: 3px;
+    font-size: 8px;
+    color: #666;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.range-number-wrapper input[type="number"]:focus {
+    border-color: #007cba;
+    box-shadow: 0 0 0 1px #007cba;
+    outline: none;
+}
+
+/* Hide number input spinners */
+.range-number-wrapper input[type="number"]::-webkit-inner-spin-button,
+.range-number-wrapper input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Custom Boxed Margin Control Styles */
+
+/* Multi-Property Control Styles (Margin, Padding, Border Radius, etc.) */
+.novacraft-boxed-multi-label {
+    display: block;
+    margin-bottom: 15px;
+}
+.novacraft-boxed-multi-label .customize-control-title {
+    margin-bottom: 5px;
+}
+.novacraft-boxed-multi-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    background-color: #f7f7f7;
+}
+.novacraft-multi-input-group {
+    display: flex;
+    flex-grow: 1;
+    gap: 0;
+    align-items: center;
+}
+.novacraft-multi-input {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+}
+.novacraft-multi-input input[type="number"] {
+    width: 100%;
+    padding: 8px 5px;
+    border: 1px solid #eee;
+    border-right: none;
+    text-align: center;
+    font-size: 14px;
+    box-sizing: border-box;
+    border-radius: 0;
+    background-color: #fff;
+    height: 36px;
+}
+.novacraft-multi-input:first-child input {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.novacraft-multi-input:last-child input {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-right: 1px solid #eee;
+}
+.novacraft-multi-input input[type="number"]::-webkit-inner-spin-button,
+.novacraft-multi-input input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+}
+.novacraft-multi-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #666;
+    margin-top: 5px;
+    white-space: nowrap;
+}
+.novacraft-multi-units {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 100%;
+}
+.novacraft-multi-link {
+    padding: 0;
+    height: auto;
+    min-height: unset;
+    line-height: 1;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-shadow: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+.novacraft-multi-link .dashicons {
+    font-size: 16px;
+    width: 20px;
+    height: auto;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.novacraft-multi-link.linked {
+    background-color: #2563eb !important;
+    color: #fff !important;
+    border-color: #2563eb !important;
+}
+.novacraft-multi-link:hover {
+    background-color: #e0e0e0;
+}
+.novacraft-multi-link.linked:hover {
+    background-color: #1d4ed8 !important;
+}
+.novacraft-multi-link:active {
+    transform: scale(0.95);
+}
+.novacraft-multi-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.novacraft-unit-label {
+    font-size: 12px;
+    color: #888;
+    text-transform: lowercase;
+} 
