@@ -5,11 +5,11 @@ jQuery(document).ready(function($) {
             name: 'Classic Blue',
             colors: {
                 'primary_color': '#2563eb',
+                'secondary_color': '#475569',
                 'accent_color': '#ff6b6b',
+                'content_bg_color': '#ffffff',
                 'bg_color': '#ffffff',
                 'text_color': '#333333',
-                'secondary_color': '#475569',
-                'content_bg_color': '#ffffff',
                 'light_color': '#f3f4f6',
                 'dark_color': '#111827'
             }
@@ -17,25 +17,25 @@ jQuery(document).ready(function($) {
         {
             name: 'Dark Mode',
             colors: {
-                'primary_color': '#2563eb', // strong blue for actions/links/buttons
-                'accent_color': '#f59e0b', // bright accent
-                'bg_color': '#111827', // very dark background
-                'text_color': '#f3f4f6', // very light for readability
-                'secondary_color': '#475569', // muted for borders/subtle text
-                'content_bg_color': '#1e293b', // slightly lighter than bg
-                'light_color': '#334155', // mid-dark for post containers, good contrast with text
-                'dark_color': '#0f172a' // pure dark for contrast
+                'primary_color': '#2563eb',
+                'secondary_color': '#475569',
+                'accent_color': '#f59e0b',
+                'content_bg_color': '#1e293b',
+                'bg_color': '#111827',
+                'text_color': '#f3f4f6',
+                'light_color': '#334155',
+                'dark_color': '#0f172a'
             }
         },
         {
             name: 'Pastel Dream',
             colors: {
                 'primary_color': '#a5b4fc',
+                'secondary_color': '#fca5a5',
                 'accent_color': '#fcd34d',
+                'content_bg_color': '#fff7ed',
                 'bg_color': '#fef3c7',
                 'text_color': '#374151',
-                'secondary_color': '#fca5a5',
-                'content_bg_color': '#fff7ed',
                 'light_color': '#f3f4f6',
                 'dark_color': '#64748b'
             }
@@ -44,11 +44,11 @@ jQuery(document).ready(function($) {
             name: 'Forest Green',
             colors: {
                 'primary_color': '#166534',
+                'secondary_color': '#4ade80',
                 'accent_color': '#65a30d',
+                'content_bg_color': '#ecfdf5',
                 'bg_color': '#f0fdf4',
                 'text_color': '#1b1f23',
-                'secondary_color': '#4ade80',
-                'content_bg_color': '#ecfdf5',
                 'light_color': '#d1fae5',
                 'dark_color': '#052e16'
             }
@@ -57,11 +57,11 @@ jQuery(document).ready(function($) {
             name: 'Modern Minimal',
             colors: {
                 'primary_color': '#1f2937',
+                'secondary_color': '#9ca3af',
                 'accent_color': '#3b82f6',
+                'content_bg_color': '#ffffff',
                 'bg_color': '#f9fafb',
                 'text_color': '#111827',
-                'secondary_color': '#9ca3af',
-                'content_bg_color': '#ffffff',
                 'light_color': '#e5e7eb',
                 'dark_color': '#1e293b'
             }
@@ -70,11 +70,11 @@ jQuery(document).ready(function($) {
             name: 'Sunset Vibes',
             colors: {
                 'primary_color': '#f97316',
+                'secondary_color': '#fdba74',
                 'accent_color': '#f43f5e',
+                'content_bg_color': '#fffaf0',
                 'bg_color': '#fff7ed',
                 'text_color': '#374151',
-                'secondary_color': '#fdba74',
-                'content_bg_color': '#fffaf0',
                 'light_color': '#ffedd5',
                 'dark_color': '#78350f'
             }
@@ -83,11 +83,11 @@ jQuery(document).ready(function($) {
             name: 'Ocean Breeze',
             colors: {
                 'primary_color': '#0ea5e9',
+                'secondary_color': '#38bdf8',
                 'accent_color': '#22d3ee',
+                'content_bg_color': '#e0f2fe',
                 'bg_color': '#ecfeff',
                 'text_color': '#0f172a',
-                'secondary_color': '#38bdf8',
-                'content_bg_color': '#e0f2fe',
                 'light_color': '#bae6fd',
                 'dark_color': '#0c4a6e'
             }
@@ -96,11 +96,11 @@ jQuery(document).ready(function($) {
             name: 'Lavender Fields',
             colors: {
                 'primary_color': '#8b5cf6',
+                'secondary_color': '#c084fc',
                 'accent_color': '#ec4899',
+                'content_bg_color': '#f3e8ff',
                 'bg_color': '#faf5ff',
                 'text_color': '#312e81',
-                'secondary_color': '#c084fc',
-                'content_bg_color': '#f3e8ff',
                 'light_color': '#ede9fe',
                 'dark_color': '#581c87'
             }
@@ -282,14 +282,31 @@ jQuery(document).ready(function($) {
         // Always append popup to #customize-theme-controls for consistent alignment
         $('#customize-theme-controls').append($palettePopup);
 
-        // Set data-title for all color circles on initial render
+        // Set data-title for all color circles on initial render, using button label logic if applicable
         $('.novacraft-color-circle').each(function() {
             var $circle = $(this);
             var setting = $circle.data('setting');
             if (setting) {
-                // Short label logic
-                var label = setting.replace(/_color$/, '').replace('primary', 'Primary').replace('accent', 'Accent').replace('bg', 'Background').replace('secondary', 'Secondary').replace('text', 'Text').replace('light', 'Light').replace('dark', 'Dark').replace('content_bg', 'Content').replace(/_/g, ' ');
-                label = label.charAt(0).toUpperCase() + label.slice(1);
+                var label = '';
+                if (/^primary_button_bg_color$|^secondary_button_bg_color$/.test(setting)) label = 'Background Normal';
+                else if (/^primary_button_bg_color_hover$|^secondary_button_bg_color_hover$/.test(setting)) label = 'Background Hover';
+                else if (/^primary_button_text_color$|^secondary_button_text_color$/.test(setting)) label = 'Text Normal';
+                else if (/^primary_button_text_color_hover$|^secondary_button_text_color_hover$/.test(setting)) label = 'Text Hover';
+                else if (/^primary_button_border_color$|^secondary_button_border_color$/.test(setting)) label = 'Border Normal';
+                else if (/^primary_button_border_color_hover$|^secondary_button_border_color_hover$/.test(setting)) label = 'Border Hover';
+                else {
+                    label = setting.replace(/_color$/, '')
+                        .replace('primary', 'Primary')
+                        .replace('accent', 'Accent')
+                        .replace('bg', 'Background')
+                        .replace('secondary', 'Secondary')
+                        .replace('text', 'Text')
+                        .replace('light', 'Light')
+                        .replace('dark', 'Dark')
+                        .replace('content_bg', 'Content')
+                        .replace(/_/g, ' ');
+                    label = label.charAt(0).toUpperCase() + label.slice(1);
+                }
                 $circle.attr('data-title', label);
             }
         });
@@ -377,25 +394,35 @@ jQuery(document).ready(function($) {
         if (!isThemePalette && !isThemeColor) {
             // Get all theme color values from hidden inputs in the Customizer
             let themeColors = [];
+            // Only include theme palette settings
+            const themePaletteKeys = [
+                'primary_color',
+                'accent_color',
+                'bg_color',
+                'text_color',
+                'secondary_color',
+                'content_bg_color',
+                'light_color',
+                'dark_color'
+            ];
             $('.novacraft-palette-input').each(function() {
                 const color = $(this).val();
                 const setting = $(this).data('customize-setting-link');
-                let label = '';
-                if (setting) {
-                    label = setting.replace(/_color$/, '')
-                        .replace('primary', 'Primary')
-                        .replace('accent', 'Accent')
-                        .replace('bg', 'Background')
-                        .replace('secondary', 'Secondary')
-                        .replace('text', 'Text')
-                        .replace('light', 'Light')
-                        .replace('dark', 'Dark')
-                        .replace('content_bg', 'Content')
-                        .replace(/_/g, ' ');
-                    label = label.charAt(0).toUpperCase() + label.slice(1);
-                }
-                if (color) {
-                    themeColors.push({ color, label });
+                if (themePaletteKeys.includes(setting)) {
+                    let label = '';
+                    // Short, clear label for theme palette swatches
+                    if (setting === 'primary_color') label = 'Primary';
+                    else if (setting === 'accent_color') label = 'Accent';
+                    else if (setting === 'bg_color') label = 'Background';
+                    else if (setting === 'text_color') label = 'Text';
+                    else if (setting === 'secondary_color') label = 'Secondary';
+                    else if (setting === 'content_bg_color') label = 'Content';
+                    else if (setting === 'light_color') label = 'Light';
+                    else if (setting === 'dark_color') label = 'Dark';
+                    else label = setting;
+                    if (color) {
+                        themeColors.push({ color, label });
+                    }
                 }
             });
             // Remove duplicates (in case of multiple controls)
@@ -504,17 +531,28 @@ jQuery(document).ready(function($) {
         let color = $(`input[data-customize-setting-link="${$circle.data('setting')}"]`).val();
         let setting = $circle.data('setting');
         // --- Use the same label logic as initial render ---
-        let label = setting.replace(/_color$/, '')
-            .replace('primary', 'Primary')
-            .replace('accent', 'Accent')
-            .replace('bg', 'Background')
-            .replace('secondary', 'Secondary')
-            .replace('text', 'Text')
-            .replace('light', 'Light')
-            .replace('dark', 'Dark')
-            .replace('content_bg', 'Content')
-            .replace(/_/g, ' ');
-        label = label.charAt(0).toUpperCase() + label.slice(1);
+        // Short, context-aware label for button color pickers
+        let label = '';
+        if (/^primary_button_bg_color$|^secondary_button_bg_color$/.test(setting)) label = 'Background Normal';
+        else if (/^primary_button_bg_color_hover$|^secondary_button_bg_color_hover$/.test(setting)) label = 'Background Hover';
+        else if (/^primary_button_text_color$|^secondary_button_text_color$/.test(setting)) label = 'Text Normal';
+        else if (/^primary_button_text_color_hover$|^secondary_button_text_color_hover$/.test(setting)) label = 'Text Hover';
+        else if (/^primary_button_border_color$|^secondary_button_border_color$/.test(setting)) label = 'Border Normal';
+        else if (/^primary_button_border_color_hover$|^secondary_button_border_color_hover$/.test(setting)) label = 'Border Hover';
+        else {
+            // fallback to previous logic for theme palette and others
+            label = setting.replace(/_color$/, '')
+                .replace('primary', 'Primary')
+                .replace('accent', 'Accent')
+                .replace('bg', 'Background')
+                .replace('secondary', 'Secondary')
+                .replace('text', 'Text')
+                .replace('light', 'Light')
+                .replace('dark', 'Dark')
+                .replace('content_bg', 'Content')
+                .replace(/_/g, ' ');
+            label = label.charAt(0).toUpperCase() + label.slice(1);
+        }
         $circle.attr('data-title', label);
         $circle.removeAttr('title');
         showPickr($circle, color, setting);

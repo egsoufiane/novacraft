@@ -189,6 +189,76 @@ class NovaCraft_Single_Color_Control extends WP_Customize_Control {
 }
 
 /**
+ * Custom Dual Color Control (Normal + Hover)
+ */
+class NovaCraft_Dual_Color_Control extends WP_Customize_Control {
+    public $type = 'dual_color';
+    public $hover_setting = '';
+
+    public function __construct($manager, $id, $args = array()) {
+        if (isset($args['hover_setting'])) {
+            $this->hover_setting = $args['hover_setting'];
+        }
+        parent::__construct($manager, $id, $args);
+    }
+
+    public function render_content() {
+        $color = $this->value();
+        $hover_color = '';
+        if ($this->hover_setting && $this->manager->get_setting($this->hover_setting)) {
+            $hover_color = $this->manager->get_setting($this->hover_setting)->value();
+        }
+        // Short, context-aware labels for button color circles
+        $base_label = !empty($this->label) ? $this->label : $this->id;
+        // Try to extract a base (e.g. 'Background', 'Text', 'Border') from the setting id
+        $type_map = array(
+            'bg' => __('Background', 'novacraft'),
+            'text' => __('Text', 'novacraft'),
+            'border' => __('Border', 'novacraft'),
+        );
+        $type = '';
+        if (preg_match('/_(bg|text|border)_color$/', $this->id, $m)) {
+            $type = $type_map[$m[1]];
+        } else {
+            $type = $base_label;
+        }
+        $label = $type . ' Normal';
+        $hover_label = $type . ' Hover';
+        ?>
+        <div class="novacraft-dual-color-row" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+            <span class="customize-control-title"><?php echo esc_html($base_label); ?></span>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div class="novacraft-color-circle"
+                    style="background: <?php echo esc_attr($color); ?>;"
+                    data-setting="<?php echo esc_attr($this->id); ?>"
+                    data-color="<?php echo esc_attr($color); ?>"
+                    data-title="<?php echo esc_attr($label); ?>">
+                </div>
+                <input type="hidden"
+                    class="novacraft-palette-input"
+                    data-customize-setting-link="<?php echo esc_attr($this->id); ?>"
+                    value="<?php echo esc_attr($color); ?>" />
+                <div class="novacraft-color-circle"
+                    style="background: <?php echo esc_attr($hover_color); ?>"
+                    data-setting="<?php echo esc_attr($this->hover_setting); ?>"
+                    data-color="<?php echo esc_attr($hover_color); ?>"
+                    data-title="<?php echo esc_attr($hover_label); ?>">
+                </div>
+                <input type="hidden"
+                    class="novacraft-palette-input"
+                    data-customize-setting-link="<?php echo esc_attr($this->hover_setting); ?>"
+                    value="<?php echo esc_attr($hover_color); ?>" />
+            </div>
+        </div>
+        <!-- Pickr popup will be dynamically created and appended to body via JS -->
+        <?php
+        if (!empty($this->description)) {
+            echo '<span class="description customize-control-description">' . esc_html($this->description) . '</span>';
+        }
+    }
+}
+
+/**
  * Sanitize RGBA Color
  */
 function sanitize_rgba_color($color) {
@@ -711,46 +781,70 @@ function novacraft_customize_register($wp_customize) {
         )
     );
     // === Primary Button Settings ===
+    // Text Color (Normal + Hover)
     $wp_customize->add_setting('primary_button_text_color', array(
         'default'           => '#ffffff',
         'sanitize_callback' => 'sanitize_rgba_color',
         'transport'         => 'postMessage',
     ));
-    $wp_customize->add_control(new NovaCraft_Single_Color_Control(
+    $wp_customize->add_setting('primary_button_text_color_hover', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Dual_Color_Control(
         $wp_customize,
         'primary_button_text_color',
         array(
-            'label'    => __('Text Color', 'novacraft'),
-            'section'  => 'novacraft_primary_button_section',
-            'settings' => 'primary_button_text_color',
+            'label'        => __('Text Color', 'novacraft'),
+            'section'      => 'novacraft_primary_button_section',
+            'settings'     => 'primary_button_text_color',
+            'hover_setting'=> 'primary_button_text_color_hover',
+            'input_attrs'  => array('hover_label' => __('Hover', 'novacraft')),
         )
     ));
+    // Background Color (Normal + Hover)
     $wp_customize->add_setting('primary_button_bg_color', array(
         'default'           => '#2563eb',
         'sanitize_callback' => 'sanitize_rgba_color',
         'transport'         => 'postMessage',
     ));
-    $wp_customize->add_control(new NovaCraft_Single_Color_Control(
+    $wp_customize->add_setting('primary_button_bg_color_hover', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Dual_Color_Control(
         $wp_customize,
         'primary_button_bg_color',
         array(
-            'label'    => __('Background Color', 'novacraft'),
-            'section'  => 'novacraft_primary_button_section',
-            'settings' => 'primary_button_bg_color',
+            'label'        => __('Background Color', 'novacraft'),
+            'section'      => 'novacraft_primary_button_section',
+            'settings'     => 'primary_button_bg_color',
+            'hover_setting'=> 'primary_button_bg_color_hover',
+            'input_attrs'  => array('hover_label' => __('Hover', 'novacraft')),
         )
     ));
+    // Border Color (Normal + Hover)
     $wp_customize->add_setting('primary_button_border_color', array(
         'default'           => '#2563eb',
         'sanitize_callback' => 'sanitize_rgba_color',
         'transport'         => 'postMessage',
     ));
-    $wp_customize->add_control(new NovaCraft_Single_Color_Control(
+    $wp_customize->add_setting('primary_button_border_color_hover', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Dual_Color_Control(
         $wp_customize,
         'primary_button_border_color',
         array(
-            'label'    => __('Border Color', 'novacraft'),
-            'section'  => 'novacraft_primary_button_section',
-            'settings' => 'primary_button_border_color',
+            'label'        => __('Border Color', 'novacraft'),
+            'section'      => 'novacraft_primary_button_section',
+            'settings'     => 'primary_button_border_color',
+            'hover_setting'=> 'primary_button_border_color_hover',
+            'input_attrs'  => array('hover_label' => __('Hover', 'novacraft')),
         )
     ));
     $wp_customize->add_setting('primary_button_border_width', array(
@@ -829,46 +923,70 @@ function novacraft_customize_register($wp_customize) {
         )
     );
     // === Secondary Button Settings ===
+    // Text Color (Normal + Hover)
     $wp_customize->add_setting('secondary_button_text_color', array(
         'default'           => '#2563eb',
         'sanitize_callback' => 'sanitize_rgba_color',
         'transport'         => 'postMessage',
     ));
-    $wp_customize->add_control(new NovaCraft_Single_Color_Control(
+    $wp_customize->add_setting('secondary_button_text_color_hover', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Dual_Color_Control(
         $wp_customize,
         'secondary_button_text_color',
         array(
-            'label'    => __('Text Color', 'novacraft'),
-            'section'  => 'novacraft_secondary_button_section',
-            'settings' => 'secondary_button_text_color',
+            'label'        => __('Text Color', 'novacraft'),
+            'section'      => 'novacraft_secondary_button_section',
+            'settings'     => 'secondary_button_text_color',
+            'hover_setting'=> 'secondary_button_text_color_hover',
+            'input_attrs'  => array('hover_label' => __('Hover', 'novacraft')),
         )
     ));
+    // Background Color (Normal + Hover)
     $wp_customize->add_setting('secondary_button_bg_color', array(
         'default'           => '#ffffff',
         'sanitize_callback' => 'sanitize_rgba_color',
         'transport'         => 'postMessage',
     ));
-    $wp_customize->add_control(new NovaCraft_Single_Color_Control(
+    $wp_customize->add_setting('secondary_button_bg_color_hover', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Dual_Color_Control(
         $wp_customize,
         'secondary_button_bg_color',
         array(
-            'label'    => __('Background Color', 'novacraft'),
-            'section'  => 'novacraft_secondary_button_section',
-            'settings' => 'secondary_button_bg_color',
+            'label'        => __('Background Color', 'novacraft'),
+            'section'      => 'novacraft_secondary_button_section',
+            'settings'     => 'secondary_button_bg_color',
+            'hover_setting'=> 'secondary_button_bg_color_hover',
+            'input_attrs'  => array('hover_label' => __('Hover', 'novacraft')),
         )
     ));
+    // Border Color (Normal + Hover)
     $wp_customize->add_setting('secondary_button_border_color', array(
         'default'           => '#2563eb',
         'sanitize_callback' => 'sanitize_rgba_color',
         'transport'         => 'postMessage',
     ));
-    $wp_customize->add_control(new NovaCraft_Single_Color_Control(
+    $wp_customize->add_setting('secondary_button_border_color_hover', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Dual_Color_Control(
         $wp_customize,
         'secondary_button_border_color',
         array(
-            'label'    => __('Border Color', 'novacraft'),
-            'section'  => 'novacraft_secondary_button_section',
-            'settings' => 'secondary_button_border_color',
+            'label'        => __('Border Color', 'novacraft'),
+            'section'      => 'novacraft_secondary_button_section',
+            'settings'     => 'secondary_button_border_color',
+            'hover_setting'=> 'secondary_button_border_color_hover',
+            'input_attrs'  => array('hover_label' => __('Hover', 'novacraft')),
         )
     ));
     $wp_customize->add_setting('secondary_button_border_width', array(
@@ -1768,6 +1886,16 @@ function novacraft_customizer_css() {
             --wp--preset--color--dark: <?php echo get_theme_mod('dark_color', '#111827'); ?>;
             --wp--preset--color--content-bg: <?php echo get_theme_mod('content_bg_color', '#ffffff'); ?>;
             --wp--preset--color--bg: <?php echo get_theme_mod('bg_color', '#cececec7'); ?>;
+            
+            /*Elementor Colors */
+            --e-global-color-primary: <?php echo get_theme_mod('primary_color', '#2563eb'); ?>;
+            --e-global-color-text: <?php echo get_theme_mod('text_color', '#1f2937'); ?>;
+            --e-global-color-secondary: <?php echo get_theme_mod('secondary_color', '#475569'); ?>;
+            --e-global-color-accent: <?php echo get_theme_mod('accent_color', '#f59e0b'); ?>;
+            --e-global-color-light: <?php echo get_theme_mod('light_color', '#f3f4f6'); ?>;
+            --e-global-color-dark: <?php echo get_theme_mod('dark_color', '#111827'); ?>;
+            --e-global-color-contentbg: <?php echo get_theme_mod('content_bg_color', '#ffffff'); ?>;
+            --e-global-color-bg: <?php echo get_theme_mod('bg_color', '#cececec7'); ?>;
 
             /* Logo dimensions */
             --logo-width: <?php echo get_theme_mod('logo_width', '150'); ?>px;
@@ -1778,6 +1906,23 @@ function novacraft_customizer_css() {
             --main-content-inner-padding: <?php echo get_theme_mod('main_content_inner_padding', 24); ?>px;
 
             /* Button Custom Properties */
+            <?php
+            // Primary button hover logic
+            $primary_btn_text_hover = get_theme_mod('primary_button_text_color_hover', '');
+            if ($primary_btn_text_hover === '' || $primary_btn_text_hover === null) $primary_btn_text_hover = $primary_btn_text;
+            $primary_btn_bg_hover = get_theme_mod('primary_button_bg_color_hover', '');
+            if ($primary_btn_bg_hover === '' || $primary_btn_bg_hover === null) $primary_btn_bg_hover = $primary_btn_bg;
+            $primary_btn_border_color_hover = get_theme_mod('primary_button_border_color_hover', '');
+            if ($primary_btn_border_color_hover === '' || $primary_btn_border_color_hover === null) $primary_btn_border_color_hover = $primary_btn_border_color;
+
+            // Secondary button hover logic
+            $secondary_btn_text_hover = get_theme_mod('secondary_button_text_color_hover', '');
+            if ($secondary_btn_text_hover === '' || $secondary_btn_text_hover === null) $secondary_btn_text_hover = $secondary_btn_text;
+            $secondary_btn_bg_hover = get_theme_mod('secondary_button_bg_color_hover', '');
+            if ($secondary_btn_bg_hover === '' || $secondary_btn_bg_hover === null) $secondary_btn_bg_hover = $secondary_btn_bg;
+            $secondary_btn_border_color_hover = get_theme_mod('secondary_button_border_color_hover', '');
+            if ($secondary_btn_border_color_hover === '' || $secondary_btn_border_color_hover === null) $secondary_btn_border_color_hover = $secondary_btn_border_color;
+            ?>
             <?php if ($primary_btn_text !== '') : ?>
                 --primary-btn-text: <?php echo esc_attr($primary_btn_text); ?>;
             <?php endif; ?>
@@ -1793,7 +1938,17 @@ function novacraft_customizer_css() {
             --primary-btn-padding-right: <?php echo esc_attr($primary_btn_padding_right); ?>px;
             --primary-btn-padding-bottom: <?php echo esc_attr($primary_btn_padding_bottom); ?>px;
             --primary-btn-padding-left: <?php echo esc_attr($primary_btn_padding_left); ?>px;
-    
+            /* Primary button hover */
+            <?php if ($primary_btn_text_hover !== '') : ?>
+                --primary-btn-text-hover: <?php echo esc_attr($primary_btn_text_hover); ?>;
+            <?php endif; ?>
+            <?php if ($primary_btn_bg_hover !== '') : ?>
+                --primary-btn-bg-hover: <?php echo esc_attr($primary_btn_bg_hover); ?>;
+            <?php endif; ?>
+            <?php if ($primary_btn_border_color_hover !== '') : ?>
+                --primary-btn-border-color-hover: <?php echo esc_attr($primary_btn_border_color_hover); ?>;
+            <?php endif; ?>
+
             <?php if ($secondary_btn_text !== '') : ?>
                 --secondary-btn-text: <?php echo esc_attr($secondary_btn_text); ?>;
             <?php endif; ?>
@@ -1809,6 +1964,16 @@ function novacraft_customizer_css() {
             --secondary-btn-padding-right: <?php echo esc_attr($secondary_btn_padding_right); ?>px;
             --secondary-btn-padding-bottom: <?php echo esc_attr($secondary_btn_padding_bottom); ?>px;
             --secondary-btn-padding-left: <?php echo esc_attr($secondary_btn_padding_left); ?>px;
+            /* Secondary button hover */
+            <?php if ($secondary_btn_text_hover !== '') : ?>
+                --secondary-btn-text-hover: <?php echo esc_attr($secondary_btn_text_hover); ?>;
+            <?php endif; ?>
+            <?php if ($secondary_btn_bg_hover !== '') : ?>
+                --secondary-btn-bg-hover: <?php echo esc_attr($secondary_btn_bg_hover); ?>;
+            <?php endif; ?>
+            <?php if ($secondary_btn_border_color_hover !== '') : ?>
+                --secondary-btn-border-color-hover: <?php echo esc_attr($secondary_btn_border_color_hover); ?>;
+            <?php endif; ?>
 
             /* Main Content Border Radius */
             --main-content-border-radius: <?php echo get_theme_mod('main_content_border_radius', 8); ?>px;

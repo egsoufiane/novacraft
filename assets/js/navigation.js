@@ -156,7 +156,7 @@
 
         // Toggle focus each time a menu link is focused or blurred.
         links.on('focus blur', function() {
-            const self = $(this);
+            let self = $(this);
             // Move up through the ancestors of the current link until we hit .nav-menu.
             while (!self.hasClass('nav-menu')) {
                 // On li elements toggle the class .focus.

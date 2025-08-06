@@ -15,10 +15,8 @@
         value.bind(function(to) {
             if (to) {
                 document.documentElement.style.setProperty('--primary-btn-text', to);
-                $('.primary-button').css('color', to);
             } else {
                 document.documentElement.style.removeProperty('--primary-btn-text');
-                $('.primary-button').css('color', '');
                 removeCSSVariableFromStyleTags('primary-btn-text');
             }
         });
@@ -28,10 +26,8 @@
         value.bind(function(to) {
             if (to) {
                 document.documentElement.style.setProperty('--primary-btn-bg', to);
-                $('.primary-button').css('background-color', to);
             } else {
                 document.documentElement.style.removeProperty('--primary-btn-bg');
-                $('.primary-button').css('background-color', '');
                 removeCSSVariableFromStyleTags('primary-btn-bg');
             }
         });
@@ -40,10 +36,8 @@
         value.bind(function(to) {
             if (to) {
                 document.documentElement.style.setProperty('--primary-btn-border-color', to);
-                $('.primary-button').css('border-color', to);
             } else {
                 document.documentElement.style.removeProperty('--primary-btn-border-color');
-                $('.primary-button').css('border-color', '');
                 removeCSSVariableFromStyleTags('primary-btn-border-color');
             }
         });
@@ -96,10 +90,8 @@
         value.bind(function(to) {
             if (to) {
                 document.documentElement.style.setProperty('--secondary-btn-text', to);
-                $('.secondary-button').css('color', to);
             } else {
                 document.documentElement.style.removeProperty('--secondary-btn-text');
-                $('.secondary-button').css('color', '');
                 removeCSSVariableFromStyleTags('secondary-btn-text');
             }
         });
@@ -108,10 +100,8 @@
         value.bind(function(to) {
             if (to) {
                 document.documentElement.style.setProperty('--secondary-btn-bg', to);
-                $('.secondary-button').css('background-color', to);
             } else {
                 document.documentElement.style.removeProperty('--secondary-btn-bg');
-                $('.secondary-button').css('background-color', '');
                 removeCSSVariableFromStyleTags('secondary-btn-bg');
             }
         });
@@ -120,10 +110,8 @@
         value.bind(function(to) {
             if (to) {
                 document.documentElement.style.setProperty('--secondary-btn-border-color', to);
-                $('.secondary-button').css('border-color', to);
             } else {
                 document.documentElement.style.removeProperty('--secondary-btn-border-color');
-                $('.secondary-button').css('border-color', '');
                 removeCSSVariableFromStyleTags('secondary-btn-border-color');
             }
         });
@@ -333,6 +321,71 @@
         });
     });
 
+    //Button Hover Effects Live Preview
+    // === Primary Button Hover Live Preview ===
+    wp.customize('primary_button_text_color_hover', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--primary-btn-text-hover', to);
+            } else {
+                document.documentElement.style.removeProperty('--primary-btn-text-hover');
+                removeCSSVariableFromStyleTags('primary-btn-text-hover');
+            }
+        });
+    });
+    wp.customize('primary_button_bg_color_hover', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--primary-btn-bg-hover', to);
+            } else {
+                document.documentElement.style.removeProperty('--primary-btn-bg-hover');
+                removeCSSVariableFromStyleTags('primary-btn-bg-hover');
+            }
+        });
+    });
+    wp.customize('primary_button_border_color_hover', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--primary-btn-border-color-hover', to);
+            } else {
+                document.documentElement.style.removeProperty('--primary-btn-border-color-hover');
+                removeCSSVariableFromStyleTags('primary-btn-border-color-hover');
+            }
+        });
+    });
+
+    // === Secondary Button Hover Live Preview ===
+    wp.customize('secondary_button_text_color_hover', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--secondary-btn-text-hover', to);
+            } else {
+                document.documentElement.style.removeProperty('--secondary-btn-text-hover');
+                removeCSSVariableFromStyleTags('secondary-btn-text-hover');
+            }
+        });
+    });
+    wp.customize('secondary_button_bg_color_hover', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--secondary-btn-bg-hover', to);
+            } else {
+                document.documentElement.style.removeProperty('--secondary-btn-bg-hover');
+                removeCSSVariableFromStyleTags('secondary-btn-bg-hover');
+            }
+        });
+    });
+    wp.customize('secondary_button_border_color_hover', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--secondary-btn-border-color-hover', to);
+            } else {
+                document.documentElement.style.removeProperty('--secondary-btn-border-color-hover');
+                removeCSSVariableFromStyleTags('secondary-btn-border-color-hover');
+            }
+        });
+    });
+
     // Helper function to update CSS custom properties
     function updateCSSProperty(property, value) {
         document.documentElement.style.setProperty(property, value);
@@ -392,24 +445,160 @@
     });
 
     // Theme colors
-    const colorSettings = {
-        'primary_color': '--wp--preset--color--primary',
-        'content_bg_color': '--wp--preset--color--content-bg',
-        'bg_color': '--wp--preset--color--bg',
-        'text_color': '--wp--preset--color--text',
-        'secondary_color': '--wp--preset--color--secondary',
-        'accent_color': '--wp--preset--color--accent',
-        'light_color': '--wp--preset--color--light',
-        'dark_color': '--wp--preset--color--dark'
-    };
+	const colorSettings = {
+		'primary_color': {
+			wpVar: '--wp--preset--color--primary',
+			elementorVar: '--e-global-color-primary'
+		},
+		'content_bg_color': {
+			wpVar: '--wp--preset--color--content-bg',
+			elementorVar: '--e-global-color-contentbg'
+		},
+		'bg_color': {
+			wpVar: '--wp--preset--color--bg',
+			elementorVar: '--e-global-color-bg'
+		},
+		'text_color': {
+			wpVar: '--wp--preset--color--text',
+			elementorVar: '--e-global-color-text'
+		},
+		'secondary_color': {
+			wpVar: '--wp--preset--color--secondary',
+			elementorVar: '--e-global-color-secondary'
+		},
+		'accent_color': {
+			wpVar: '--wp--preset--color--accent',
+			elementorVar: '--e-global-color-accent'
+		},
+		'light_color': {
+			wpVar: '--wp--preset--color--light',
+			elementorVar: '--e-global-color-light'
+		},
+		'dark_color': {
+			wpVar: '--wp--preset--color--dark',
+			elementorVar: '--e-global-color-dark'
+		}
+	};
 
-    Object.entries(colorSettings).forEach(([setting, property]) => {
+	// Utility function to update CSS custom properties
+	function updateCSSProperty(property, value) {
+		// Update main document
+		document.documentElement.style.setProperty(property, value);
+
+		// Update all Elementor containers
+		const elementorContainers = [
+			'.elementor-kit',
+			'.elementor-location-header',
+			'.elementor-location-footer',
+			'.elementor-section',
+			'.elementor-widget-wrap',
+			'.elementor-page'
+		];
+
+		elementorContainers.forEach(selector => {
+			document.querySelectorAll(selector).forEach(el => {
+				el.style.setProperty(property, value);
+			});
+		});
+
+		// Update all preview iframes
+		document.querySelectorAll('iframe').forEach(iframe => {
+			try {
+				if (iframe.contentDocument) {
+					const iframeDoc = iframe.contentDocument;
+					iframeDoc.documentElement.style.setProperty(property, value);
+
+					elementorContainers.forEach(selector => {
+						iframeDoc.querySelectorAll(selector).forEach(el => {
+							el.style.setProperty(property, value);
+						});
+					});
+				}
+			} catch (e) {
+				console.log('Could not update iframe:', e);
+			}
+		});
+	}
+
+	// Initialize when customizer is ready
+	wp.customize.bind('ready', function() {
+		// Set initial values
+		Object.entries(colorSettings).forEach(([setting, vars]) => {
+			const value = wp.customize(setting)();
+			updateCSSProperty(vars.wpVar, value);
+			updateCSSProperty(vars.elementorVar, value);
+		});
+
+		// Bind live updates
+		Object.entries(colorSettings).forEach(([setting, vars]) => {
+			wp.customize(setting, function(value) {
+				value.bind(function(to) {
+					updateCSSProperty(vars.wpVar, to);
+					updateCSSProperty(vars.elementorVar, to);
+				});
+			});
+		});
+	});
+
+	// Re-apply colors on preview navigation
+	if (wp.customize && wp.customize.previewer) {
+		wp.customize.previewer.bind('ready', function() {
+			Object.entries(colorSettings).forEach(([setting, vars]) => {
+				const value = wp.customize(setting).get();
+				updateCSSProperty(vars.wpVar, value);
+				updateCSSProperty(vars.elementorVar, value);
+			});
+		});
+
+		wp.customize.previewer.bind('url', function() {
+			setTimeout(() => {
+				Object.entries(colorSettings).forEach(([setting, vars]) => {
+					const value = wp.customize(setting).get();
+					updateCSSProperty(vars.wpVar, value);
+					updateCSSProperty(vars.elementorVar, value);
+				});
+			}, 300);
+		});
+	}
+
+	// Watch for Elementor containers being added dynamically
+	const observer = new MutationObserver(mutations => {
+		mutations.forEach(mutation => {
+			if (mutation.addedNodes.length) {
+				Object.entries(colorSettings).forEach(([setting, vars]) => {
+					const value = wp.customize(setting).get();
+					updateCSSProperty(vars.wpVar, value);
+					updateCSSProperty(vars.elementorVar, value);
+				});
+			}
+		});
+	});
+
+	observer.observe(document.body, {
+		childList: true,
+		subtree: true
+	});
+
+    // Bind settings to both WP and Elementor vars
+    Object.entries(colorSettings).forEach(([setting, vars]) => {
         wp.customize(setting, function(value) {
             value.bind(function(to) {
-                updateCSSProperty(property, to);
+                updateCSSProperty(vars.wpVar, to);
+                updateCSSProperty(vars.elementorVar, to);
             });
         });
     });
+
+    // Re-apply all color variables on Customizer preview reload (for Elementor/non-Elementor switching)
+    if (wp.customize && wp.customize.previewer) {
+        wp.customize.previewer.bind('ready', function() {
+            Object.entries(colorSettings).forEach(([setting, vars]) => {
+                var value = wp.customize(setting).get();
+                updateCSSProperty(vars.wpVar, value);
+                updateCSSProperty(vars.elementorVar, value);
+            });
+        });
+    }
 
     // Logo handling
     wp.customize('logo_width', function(value) {
