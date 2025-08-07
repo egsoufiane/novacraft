@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 
 if (!defined('NOVACRAFT_VERSION')) {
     // Replace the version number of the theme on each release.
-    define('NOVACRAFT_VERSION', '1.0.16');
+    define('NOVACRAFT_VERSION', '1.0.17');
 }
 
 // Define theme directory URI
@@ -103,35 +103,6 @@ function novacraft_setup() {
 
     // Add support for responsive embeds.
     add_theme_support('responsive-embeds');
-
-    // Add support for custom colors.
-    add_theme_support('editor-color-palette', array(
-        array(
-            'name'  => esc_html__('Primary', 'novacraft'),
-            'slug'  => 'primary',
-            'color' => '#007bff',
-        ),
-        array(
-            'name'  => esc_html__('Secondary', 'novacraft'),
-            'slug'  => 'secondary',
-            'color' => '#6c757d',
-        ),
-        array(
-            'name'  => esc_html__('Accent', 'novacraft'),
-            'slug'  => 'accent',
-            'color' => '#28a745',
-        ),
-        array(
-            'name'  => esc_html__('Light', 'novacraft'),
-            'slug'  => 'light',
-            'color' => '#f8f9fa',
-        ),
-        array(
-            'name'  => esc_html__('Dark', 'novacraft'),
-            'slug'  => 'dark',
-            'color' => '#343a40',
-        ),
-    ));
 
     // Add support for custom font sizes.
     add_theme_support('editor-font-sizes', array(
@@ -483,6 +454,10 @@ function novacraft_register_button_block_styles() {
 }
 add_action('init', 'novacraft_register_button_block_styles');
 
+/**
+ * Button Styles for Block Editor
+ * This function outputs CSS variables for button styles in the block editor.
+ */
 // Use main style.css for block editor styles
 function novacraft_block_editor_styles() {
     add_theme_support('editor-styles');
@@ -493,24 +468,6 @@ add_action('after_setup_theme', 'novacraft_block_editor_styles');
 
 // Output CSS variables for block editor (so editor gets customizer-driven button styles)
 function novacraft_block_editor_button_vars() {
-    // $primary_btn_text = get_theme_mod('primary_button_text_color', '#ffffff');
-    // $primary_btn_bg = get_theme_mod('primary_button_bg_color', '#2563eb');
-    // $primary_btn_border_color = get_theme_mod('primary_button_border_color', '#2563eb');
-    // $primary_btn_border_width = get_theme_mod('primary_button_border_width', 2);
-    // $primary_btn_radius = get_theme_mod('primary_button_border_radius', 4);
-    // $primary_btn_padding_top = get_theme_mod('primary_button_padding_top', 12);
-    // $primary_btn_padding_right = get_theme_mod('primary_button_padding_right', 24);
-    // $primary_btn_padding_bottom = get_theme_mod('primary_button_padding_bottom', 12);
-    // $primary_btn_padding_left = get_theme_mod('primary_button_padding_left', 24);
-    // $secondary_btn_text = get_theme_mod('secondary_button_text_color', '#2563eb');
-    // $secondary_btn_bg = get_theme_mod('secondary_button_bg_color', '#ffffff');
-    // $secondary_btn_border_color = get_theme_mod('secondary_button_border_color', '#2563eb');
-    // $secondary_btn_border_width = get_theme_mod('secondary_button_border_width', 2);
-    // $secondary_btn_radius = get_theme_mod('secondary_button_border_radius', 4);
-    // $secondary_btn_padding_top = get_theme_mod('secondary_button_padding_top', 12);
-    // $secondary_btn_padding_right = get_theme_mod('secondary_button_padding_right', 24);
-    // $secondary_btn_padding_bottom = get_theme_mod('secondary_button_padding_bottom', 12);
-    // $secondary_btn_padding_left = get_theme_mod('secondary_button_padding_left', 24);
 
     // Also output theme color variables for fallback in block editor
     $primary = get_theme_mod('primary_color', '#2563eb');
@@ -713,3 +670,53 @@ add_action('customize_save_after', function() {
         wp_cache_flush();
     }
 }, 20);
+
+
+/**
+ * Add Editor Color Palette
+ * This function adds a custom color palette to the block editor.
+ */
+add_action('after_setup_theme', function () {
+    add_theme_support('editor-color-palette', [
+        [
+            'name'  => __('Primary', 'novacraft'),
+            'slug'  => 'primary',
+            'color' => get_theme_mod('primary_color', '#2563eb'),
+        ],
+        [
+            'name'  => __('Text', 'novacraft'),
+            'slug'  => 'text',
+            'color' => get_theme_mod('text_color', '#1f2937'),
+        ],
+        [
+            'name'  => __('Secondary', 'novacraft'),
+            'slug'  => 'secondary',
+            'color' => get_theme_mod('secondary_color', '#475569'),
+        ],
+        [
+            'name'  => __('Accent', 'novacraft'),
+            'slug'  => 'accent',
+            'color' => get_theme_mod('accent_color', '#f59e0b'),
+        ],
+        [
+            'name'  => __('Light', 'novacraft'),
+            'slug'  => 'light',
+            'color' => get_theme_mod('light_color', '#f3f4f6'),
+        ],
+        [
+            'name'  => __('Dark', 'novacraft'),
+            'slug'  => 'dark',
+            'color' => get_theme_mod('dark_color', '#111827'),
+        ],
+        [
+            'name'  => __('Content Background', 'novacraft'),
+            'slug'  => 'content-bg',
+            'color' => get_theme_mod('content_bg_color', '#ffffff'),
+        ],
+        [
+            'name'  => __('Background', 'novacraft'),
+            'slug'  => 'bg',
+            'color' => get_theme_mod('bg_color', '#cececec7'),
+        ],
+    ]);
+});
