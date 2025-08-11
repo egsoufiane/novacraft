@@ -63,7 +63,7 @@ function my_theme_import_files() {
     $import_files = [];
 
     foreach ($demos as $demo) {
-        $folder = $demo['folder'];
+        $folder = 'demos/' . $demo['folder'];
         $name = $demo['name'] ?? ucfirst(str_replace('_', ' ', $folder));
         $preview_url = $demo['preview'] ?? '';
         $has_kit = $demo['kit'] ?? false;

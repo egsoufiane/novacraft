@@ -4,7 +4,7 @@ Theme URI: https://novacraft.com
 Author: Your Name
 Author URI: https://yourwebsite.com
 Description: A modern and versatile WordPress theme for creative professionals and businesses.
-Version: 1.0.17
+Version: 1.0.20
 Requires at least: 5.0
 Tested up to: 6.4
 Requires PHP: 7.4
@@ -1018,25 +1018,12 @@ body.no-sidebar .main-content {
     opacity: 1;
 }
 
-/* Buttons */
-
-/* Primary Button: front-end and block editor style */
-/* .primary-button,
-.wp-block-button__link.is-style-primary,
-.wp-block-button__link.primary-button {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: var(--primary-btn-bg, var(--wp--preset--color--primary));
-    color: var(--primary-btn-text, #ffffff);
-    border-width: var(--primary-btn-border-width, 2px);
-    border-style: solid;
-    border-color: var(--primary-btn-border-color, var(--primary-btn-bg, var(--wp--preset--color--primary)));
-    border-radius: var(--primary-btn-radius, 4px);
-    text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s, border-color 0.3s;
-} */
-
-.primary-button, .wp-block-button.is-style-primary .wp-block-button__link{
+/**
+ * BUTTONS
+ */
+/* Primary Button */
+.primary-button, .wp-block-button.is-style-primary .wp-block-button__link, .elementor-button.elementor-button-primary,
+.elementor-widget-button.elementor-button-primary > a.elementor-button{
     display: inline-block;
     padding: var(--primary-btn-padding-top, 0.5rem) var(--primary-btn-padding-right, 1rem) var(--primary-btn-padding-bottom, 0.5rem) var(--primary-btn-padding-left, 1rem);
     background-color: var(--primary-btn-bg, var(--wp--preset--color--primary));
@@ -1052,13 +1039,17 @@ body.no-sidebar .main-content {
   }
 
 
-.primary-button:hover, .wp-block-button.is-style-primary .wp-block-button__link:hover {
+.primary-button:hover, .wp-block-button.is-style-primary .wp-block-button__link:hover, .elementor-button.elementor-button-primary:hover,
+.elementor-widget-button.elementor-button-primary > a.elementor-button:hover{
     background-color: var(--primary-btn-bg-hover, var(--wp--preset--color--accent));
     color: var(--primary-btn-text-hover, var(--wp--preset--color--light));
     border-color: var(--primary-btn-border-color-hover, var(--wp--preset--color--accent));
 }
 
-.secondary-button, .wp-block-button.is-style-secondary .wp-block-button__link{
+
+/* Secondary Button */
+.secondary-button, .wp-block-button.is-style-secondary .wp-block-button__link, .elementor-button.elementor-button-secondary,
+.elementor-widget-button.elementor-button-secondary > a.elementor-button{
     background-color: var(--secondary-btn-bg, var(--wp--preset--color--secondary));
     color: var(--secondary-btn-text, var(--wp--preset--color--light));
     border-width: var(--secondary-btn-border-width, 2px);
@@ -1073,11 +1064,47 @@ body.no-sidebar .main-content {
     font-weight: 500;
 }
 
-
-.secondary-button:hover, .wp-block-button.is-style-secondary .wp-block-button__link:hover{
+.secondary-button:hover, .wp-block-button.is-style-secondary .wp-block-button__link:hover, .elementor-button.elementor-button-secondary:hover,
+.elementor-widget-button.elementor-button-secondary > a.elementor-button:hover{
     background-color: var(--secondary-btn-bg-hover, var(--wp--preset--color--accent));
     color: var(--secondary-btn-text-hover, var(--wp--preset--color--light));
     border-color: var(--secondary-btn-border-color-hover, var(--wp--preset--color--accent));
+}
+
+/**
+ * Elementor Button Styles
+ * Force correct styles in Elementor editor
+ */
+/* Primary - force correct background in Elementor editor */
+.elementor-editor-active .elementor-widget-button.elementor-button-primary a.elementor-button,
+.elementor-editor-active .elementor-element.elementor-button-primary a.elementor-button {
+    background-color: var(--primary-btn-bg, var(--wp--preset--color--primary)) !important;
+    color: var(--primary-btn-text, var(--wp--preset--color--light)) !important;
+    border-color: var(--primary-btn-border-color, var(--wp--preset--color--primary)) !important;
+}
+
+/* Hover inside editor */
+.elementor-editor-active .elementor-widget-button.elementor-button-primary a.elementor-button:hover,
+.elementor-editor-active .elementor-element.elementor-button-primary a.elementor-button:hover {
+    background-color: var(--primary-btn-bg-hover, var(--wp--preset--color--accent)) !important;
+    color: var(--primary-btn-text-hover, var(--wp--preset--color--light)) !important;
+    border-color: var(--primary-btn-border-color-hover, var(--wp--preset--color--accent)) !important;
+}
+
+/* Secondary - force correct background in Elementor editor */
+.elementor-editor-active .elementor-widget-button.elementor-button-secondary a.elementor-button,
+.elementor-editor-active .elementor-element.elementor-button-secondary a.elementor-button {
+    background-color: var(--secondary-btn-bg, var(--wp--preset--color--secondary)) !important;
+    color: var(--secondary-btn-text, var(--wp--preset--color--light)) !important;
+    border-color: var(--secondary-btn-border-color, var(--wp--preset--color--secondary)) !important;
+}
+
+/* Hover inside editor */
+.elementor-editor-active .elementor-widget-button.elementor-button-secondary a.elementor-button:hover,
+.elementor-editor-active .elementor-element.elementor-button-secondary a.elementor-button:hover {
+    background-color: var(--secondary-btn-bg-hover, var(--wp--preset--color--accent)) !important;
+    color: var(--secondary-btn-text-hover, var(--wp--preset--color--light)) !important;
+    border-color: var(--secondary-btn-border-color-hover, var(--wp--preset--color--accent)) !important;
 }
 
 /* Forms */

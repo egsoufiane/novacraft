@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 
 if (!defined('NOVACRAFT_VERSION')) {
     // Replace the version number of the theme on each release.
-    define('NOVACRAFT_VERSION', '1.0.17');
+    define('NOVACRAFT_VERSION', '1.0.20');
 }
 
 // Define theme directory URI
@@ -23,6 +23,7 @@ require_once get_template_directory() . '/inc/template-functions.php';
 require_once get_template_directory() . '/inc/template-tags.php';
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/demo-import.php';
+require_once get_template_directory() . '/inc/theme-colors.php';
 
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -550,173 +551,14 @@ function novacraft_block_editor_button_vars() {
 }
 add_action('enqueue_block_editor_assets', 'novacraft_block_editor_button_vars');
 
-/**
- * Elementor Kit Colors
- */
-// Update Elementor Kit with Theme Colors
-add_action('elementor/init', 'update_elementor_kit_colors');
-add_action('customize_save_after', 'update_elementor_kit_colors');
-add_action('update_option_theme_mods_' . get_option('stylesheet'), 'update_elementor_kit_colors');
-add_action('after_switch_theme', 'update_elementor_kit_colors');
+//Button Styles in Elementor
+add_action( 'elementor/element/button/section_button/before_section_end', function( $element, $args ) {
+    $control_data = $element->get_controls( 'button_type' );
+    
+    // Add new options
+    $control_data['options']['primary'] = __( 'Primary', 'novacraft' );
+    $control_data['options']['secondary'] = __( 'Secondary', 'novacraft' );
 
-function update_elementor_kit_colors() {
-    static $has_run = false;
-    if ($has_run) return;
-    $has_run = true;
-
-    // Check if Elementor is properly loaded
-    if (!class_exists('\Elementor\Plugin') || !\Elementor\Plugin::$instance || !\Elementor\Plugin::$instance->documents) {
-        return;
-    }
-    
-    $kit_id = get_option('elementor_active_kit');
-    if (!$kit_id) return;
-    
-    $kit = Elementor\Plugin::$instance->documents->get($kit_id);
-    if (!$kit) return;
-    
-    $kit_settings = $kit->get_settings();
-    
-    // Define theme colors with semantic IDs
-    $theme_colors = [
-        'primary' => [
-            'id' => 'primary',
-            'title' => 'Primary Color',
-            'color' => sanitize_hex_color(get_theme_mod('primary_color', '#2563eb'))
-        ],
-        'secondary' => [
-            'id' => 'secondary',
-            'title' => 'Secondary Color',
-            'color' => sanitize_hex_color(get_theme_mod('secondary_color', '#475569'))
-        ],
-        'accent' => [
-            'id' => 'accent',
-            'title' => 'Accent Color',
-            'color' => sanitize_hex_color(get_theme_mod('accent_color', '#f59e0b'))
-        ],
-        'text' => [
-            'id' => 'text',
-            'title' => 'Text Color',
-            'color' => sanitize_hex_color(get_theme_mod('text_color', '#1f2937'))
-        ],
-        'bg' => [
-            'id' => 'bg',
-            'title' => 'Background Color',
-            'color' => sanitize_hex_color(get_theme_mod('bg_color', '#cececec7'))
-        ],
-        'content-bg' => [
-            'id' => 'contentbg',
-            'title' => 'Content Background',
-            'color' => sanitize_hex_color(get_theme_mod('content_bg_color', '#ffffff'))
-        ],
-        'light' => [
-            'id' => 'light',
-            'title' => 'Light Color',
-            'color' => sanitize_hex_color(get_theme_mod('light_color', '#f3f4f6'))
-        ],
-        'dark' => [
-            'id' => 'dark',
-            'title' => 'Dark Color',
-            'color' => sanitize_hex_color(get_theme_mod('dark_color', '#111827'))
-        ],
-    ];
-    
-    // Get current custom colors
-    $current_colors = $kit_settings['custom_colors'] ?? [];
-    
-    // Create a new color array with only theme colors
-    $new_colors = [];
-    
-    // Add theme colors first
-    foreach ($theme_colors as $color_data) {
-        $new_colors[] = [
-            '_id' => $color_data['id'],
-            'title' => $color_data['title'],
-            'color' => $color_data['color']
-        ];
-    }
-    
-    // Preserve non-theme custom colors
-    $theme_ids = array_column($theme_colors, 'id');
-    foreach ($current_colors as $color) {
-        if (!in_array($color['_id'], $theme_ids)) {
-            $new_colors[] = $color;
-        }
-    }
-    
-    $kit_settings['custom_colors'] = $new_colors;
-    
-    // Save settings
-    $page_settings_manager = \Elementor\Core\Settings\Manager::get_settings_managers('page');
-    $page_settings_manager->save_settings($kit_settings, $kit_id);
-    
-    // Clear all Elementor caches
-    Elementor\Plugin::$instance->files_manager->clear_cache();
-    if (class_exists('\Elementor\Core\Breakpoints\Manager')) {
-        \Elementor\Plugin::$instance->breakpoints->refresh();
-    }
-    
-    // Flush WordPress object cache
-    wp_cache_flush();
-}
-
-// Enhanced cache clearing
-add_action('customize_save_after', function() {
-    if (class_exists('\Elementor\Plugin')) {
-        \Elementor\Plugin::$instance->files_manager->clear_cache();
-        if (class_exists('\Elementor\Core\Breakpoints\Manager')) {
-            \Elementor\Plugin::$instance->breakpoints->refresh();
-        }
-        wp_cache_flush();
-    }
-}, 20);
-
-
-/**
- * Add Editor Color Palette
- * This function adds a custom color palette to the block editor.
- */
-add_action('after_setup_theme', function () {
-    add_theme_support('editor-color-palette', [
-        [
-            'name'  => __('Primary', 'novacraft'),
-            'slug'  => 'primary',
-            'color' => get_theme_mod('primary_color', '#2563eb'),
-        ],
-        [
-            'name'  => __('Text', 'novacraft'),
-            'slug'  => 'text',
-            'color' => get_theme_mod('text_color', '#1f2937'),
-        ],
-        [
-            'name'  => __('Secondary', 'novacraft'),
-            'slug'  => 'secondary',
-            'color' => get_theme_mod('secondary_color', '#475569'),
-        ],
-        [
-            'name'  => __('Accent', 'novacraft'),
-            'slug'  => 'accent',
-            'color' => get_theme_mod('accent_color', '#f59e0b'),
-        ],
-        [
-            'name'  => __('Light', 'novacraft'),
-            'slug'  => 'light',
-            'color' => get_theme_mod('light_color', '#f3f4f6'),
-        ],
-        [
-            'name'  => __('Dark', 'novacraft'),
-            'slug'  => 'dark',
-            'color' => get_theme_mod('dark_color', '#111827'),
-        ],
-        [
-            'name'  => __('Content Background', 'novacraft'),
-            'slug'  => 'content-bg',
-            'color' => get_theme_mod('content_bg_color', '#ffffff'),
-        ],
-        [
-            'name'  => __('Background', 'novacraft'),
-            'slug'  => 'bg',
-            'color' => get_theme_mod('bg_color', '#cececec7'),
-        ],
-    ]);
-});
+    // Update control with new options
+    $element->update_control( 'button_type', $control_data );
+}, 10, 2 );

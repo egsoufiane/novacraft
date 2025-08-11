@@ -480,39 +480,33 @@
 		}
 	};
 
-	// Utility function to update CSS custom properties
-	function updateCSSProperty(property, value) {
-		// Update main document
-		document.documentElement.style.setProperty(property, value);
+	// Apply to :root + Elementor containers
+	function applyVarToDoc(doc, wpVar, elemVar, value) {
+		if (!doc) return;
 
-		// Update all Elementor containers
-		const elementorContainers = [
-			'.elementor-kit',
-			'.elementor-location-header',
-			'.elementor-location-footer',
-			'.elementor-section',
-			'.elementor-widget-wrap',
-			'.elementor-page'
-		];
+		// Theme root
+		doc.documentElement.style.setProperty(wpVar, value);
 
-		elementorContainers.forEach(selector => {
-			document.querySelectorAll(selector).forEach(el => {
-				el.style.setProperty(property, value);
+		// Elementor vars
+		doc.documentElement.style.setProperty(elemVar, value);
+
+		// Elementor containers that may override vars
+		doc.querySelectorAll('.elementor, .elementor-kit, .elementor-location-header, .elementor-location-footer')
+			.forEach(el => {
+				el.style.setProperty(wpVar, value);
+				el.style.setProperty(elemVar, value);
 			});
-		});
+	}
 
-		// Update all preview iframes
+	function updateThemeColorCSSProperty(wpVar, elemVar, value) {
+		// Main document
+		applyVarToDoc(document, wpVar, elemVar, value);
+
+		// Elementor iframes (headers, footers, etc.)
 		document.querySelectorAll('iframe').forEach(iframe => {
 			try {
 				if (iframe.contentDocument) {
-					const iframeDoc = iframe.contentDocument;
-					iframeDoc.documentElement.style.setProperty(property, value);
-
-					elementorContainers.forEach(selector => {
-						iframeDoc.querySelectorAll(selector).forEach(el => {
-							el.style.setProperty(property, value);
-						});
-					});
+					applyVarToDoc(iframe.contentDocument, wpVar, elemVar, value);
 				}
 			} catch (e) {
 				console.log('Could not update iframe:', e);
@@ -520,85 +514,44 @@
 		});
 	}
 
-	// Initialize when customizer is ready
-	wp.customize.bind('ready', function() {
-		// Set initial values
+	function applyAllColors() {
 		Object.entries(colorSettings).forEach(([setting, vars]) => {
-			const value = wp.customize(setting)();
-			updateCSSProperty(vars.wpVar, value);
-			updateCSSProperty(vars.elementorVar, value);
-		});
-
-		// Bind live updates
-		Object.entries(colorSettings).forEach(([setting, vars]) => {
-			wp.customize(setting, function(value) {
-				value.bind(function(to) {
-					updateCSSProperty(vars.wpVar, to);
-					updateCSSProperty(vars.elementorVar, to);
-				});
-			});
-		});
-	});
-
-	// Re-apply colors on preview navigation
-	if (wp.customize && wp.customize.previewer) {
-		wp.customize.previewer.bind('ready', function() {
-			Object.entries(colorSettings).forEach(([setting, vars]) => {
-				const value = wp.customize(setting).get();
-				updateCSSProperty(vars.wpVar, value);
-				updateCSSProperty(vars.elementorVar, value);
-			});
-		});
-
-		wp.customize.previewer.bind('url', function() {
-			setTimeout(() => {
-				Object.entries(colorSettings).forEach(([setting, vars]) => {
-					const value = wp.customize(setting).get();
-					updateCSSProperty(vars.wpVar, value);
-					updateCSSProperty(vars.elementorVar, value);
-				});
-			}, 300);
+			const value = wp.customize(setting).get();
+			updateThemeColorCSSProperty(vars.wpVar, vars.elementorVar, value);
 		});
 	}
 
-	// Watch for Elementor containers being added dynamically
-	const observer = new MutationObserver(mutations => {
-		mutations.forEach(mutation => {
-			if (mutation.addedNodes.length) {
-				Object.entries(colorSettings).forEach(([setting, vars]) => {
-					const value = wp.customize(setting).get();
-					updateCSSProperty(vars.wpVar, value);
-					updateCSSProperty(vars.elementorVar, value);
+	wp.customize.bind('ready', function () {
+		applyAllColors();
+
+		Object.entries(colorSettings).forEach(([setting, vars]) => {
+			wp.customize(setting, function (value) {
+				value.bind(function (to) {
+					updateThemeColorCSSProperty(vars.wpVar, vars.elementorVar, to);
 				});
-			}
+			});
 		});
 	});
 
-	observer.observe(document.body, {
-		childList: true,
-		subtree: true
+	if (wp.customize && wp.customize.previewer) {
+		wp.customize.previewer.bind('ready', applyAllColors);
+
+		wp.customize.previewer.bind('url', function () {
+			setTimeout(applyAllColors, 200);
+		});
+	}
+
+	// Only watch for iframe loads instead of all DOM changes
+	const observer = new MutationObserver(mutations => {
+		mutations.forEach(mutation => {
+			mutation.addedNodes.forEach(node => {
+				if (node.tagName === 'IFRAME') {
+					node.addEventListener('load', applyAllColors);
+				}
+			});
+		});
 	});
-
-    // Bind settings to both WP and Elementor vars
-    Object.entries(colorSettings).forEach(([setting, vars]) => {
-        wp.customize(setting, function(value) {
-            value.bind(function(to) {
-                updateCSSProperty(vars.wpVar, to);
-                updateCSSProperty(vars.elementorVar, to);
-            });
-        });
-    });
-
-    // Re-apply all color variables on Customizer preview reload (for Elementor/non-Elementor switching)
-    if (wp.customize && wp.customize.previewer) {
-        wp.customize.previewer.bind('ready', function() {
-            Object.entries(colorSettings).forEach(([setting, vars]) => {
-                var value = wp.customize(setting).get();
-                updateCSSProperty(vars.wpVar, value);
-                updateCSSProperty(vars.elementorVar, value);
-            });
-        });
-    }
+	observer.observe(document.body, { childList: true, subtree: true });
 
     // Logo handling
     wp.customize('logo_width', function(value) {
@@ -1022,21 +975,25 @@
                     'border-bottom': '1px solid var(--wp--preset--color--light)'
                 },
                 'boxed': {
-                    'background-color': 'var(--post-bg-color)',
+                    // Do NOT set background-color inline, let CSS handle var(--post-bg-color, fallback)
                     'box-shadow': 'var(--post-box-shadow)',
                     'padding': 'var(--post-padding)',
                     'border-radius': 'var(--post-border-radius)'
                 }
             };
 
-            // Apply the style
+            // Remove any inline background-color when switching style
+            $('.posts-container article').removeAttr('style');
             $('.posts-container article').attr('data-style', to).css(styles[to] || styles.boxed);
 
-            // If switching to boxed, always re-apply the current post_bg_color and border radius as inline style
+            // If switching to boxed, only set border-radius inline if needed
             if (to === 'boxed') {
                 var currentBgColor = wp.customize('post_bg_color').get();
                 if (currentBgColor) {
                     $('article[data-style="boxed"]').css('background-color', currentBgColor);
+                } else {
+                    // Remove inline background-color to allow CSS fallback
+                    $('article[data-style="boxed"]').css('background-color', '');
                 }
                 var currentBorderRadius = wp.customize('post_border_radius').get();
                 if (typeof currentBorderRadius !== 'undefined' && currentBorderRadius !== null) {
@@ -1049,10 +1006,12 @@
     // Post Background Color
     wp.customize('post_bg_color', function(value) {
         value.bind(function(to) {
-            // document.documentElement.style.setProperty('--post-bg-color', to);
-            // $('article[data-style="boxed"]').css('background-color', to);
-            $('.posts-container article').css('background-color', to);
-            
+            // Only set inline background-color if a value is present, otherwise remove it for fallback
+            if (to) {
+                $('article[data-style="boxed"]').css('background-color', to);
+            } else {
+                $('article[data-style="boxed"]').css('background-color', '');
+            }
         });
     });
 

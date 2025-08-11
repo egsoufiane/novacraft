@@ -1877,25 +1877,25 @@ function novacraft_customizer_css() {
             }
             ?>
 
-            /* Colors */
-            --wp--preset--color--primary: <?php echo get_theme_mod('primary_color', '#2563eb'); ?>;
-            --wp--preset--color--text: <?php echo get_theme_mod('text_color', '#1f2937'); ?>;
-            --wp--preset--color--secondary: <?php echo get_theme_mod('secondary_color', '#475569'); ?>;
-            --wp--preset--color--accent: <?php echo get_theme_mod('accent_color', '#f59e0b'); ?>;
-            --wp--preset--color--light: <?php echo get_theme_mod('light_color', '#f3f4f6'); ?>;
-            --wp--preset--color--dark: <?php echo get_theme_mod('dark_color', '#111827'); ?>;
-            --wp--preset--color--content-bg: <?php echo get_theme_mod('content_bg_color', '#ffffff'); ?>;
-            --wp--preset--color--bg: <?php echo get_theme_mod('bg_color', '#cececec7'); ?>;
-            
-            /*Elementor Colors */
-            --e-global-color-primary: <?php echo get_theme_mod('primary_color', '#2563eb'); ?>;
-            --e-global-color-text: <?php echo get_theme_mod('text_color', '#1f2937'); ?>;
-            --e-global-color-secondary: <?php echo get_theme_mod('secondary_color', '#475569'); ?>;
-            --e-global-color-accent: <?php echo get_theme_mod('accent_color', '#f59e0b'); ?>;
-            --e-global-color-light: <?php echo get_theme_mod('light_color', '#f3f4f6'); ?>;
-            --e-global-color-dark: <?php echo get_theme_mod('dark_color', '#111827'); ?>;
-            --e-global-color-contentbg: <?php echo get_theme_mod('content_bg_color', '#ffffff'); ?>;
-            --e-global-color-bg: <?php echo get_theme_mod('bg_color', '#cececec7'); ?>;
+         	/* Colors */
+       		--wp--preset--color--primary: <?php echo esc_html(get_theme_mod('primary_color', '#2563eb')); ?>;
+            --wp--preset--color--text: <?php echo esc_html(get_theme_mod('text_color', '#1f2937')); ?>;
+            --wp--preset--color--secondary: <?php echo esc_html(get_theme_mod('secondary_color', '#475569')); ?>;
+            --wp--preset--color--accent: <?php echo esc_html(get_theme_mod('accent_color', '#f59e0b')); ?>;
+            --wp--preset--color--light: <?php echo esc_html(get_theme_mod('light_color', '#f3f4f6')); ?>;
+            --wp--preset--color--dark: <?php echo esc_html(get_theme_mod('dark_color', '#111827')); ?>;
+            --wp--preset--color--content-bg: <?php echo esc_html(get_theme_mod('content_bg_color', '#ffffff')); ?>;
+            --wp--preset--color--bg: <?php echo esc_html(get_theme_mod('bg_color', '#cececec7')); ?>;
+
+			/*Elementor Colors */
+            --e-global-color-primary: var(--wp--preset--color--primary);
+            --e-global-color-text: var(--wp--preset--color--text);
+            --e-global-color-secondary: var(--wp--preset--color--secondary);
+            --e-global-color-accent: var(--wp--preset--color--accent);
+            --e-global-color-light: var(--wp--preset--color--light);
+            --e-global-color-dark: var(--wp--preset--color--dark);
+            --e-global-color-contentbg: var(--wp--preset--color--content-bg);
+            --e-global-color-bg: var(--wp--preset--color--bg);
 
             /* Logo dimensions */
             --logo-width: <?php echo get_theme_mod('logo_width', '150'); ?>px;
@@ -1909,19 +1909,13 @@ function novacraft_customizer_css() {
             <?php
             // Primary button hover logic
             $primary_btn_text_hover = get_theme_mod('primary_button_text_color_hover', '');
-            if ($primary_btn_text_hover === '' || $primary_btn_text_hover === null) $primary_btn_text_hover = $primary_btn_text;
             $primary_btn_bg_hover = get_theme_mod('primary_button_bg_color_hover', '');
-            if ($primary_btn_bg_hover === '' || $primary_btn_bg_hover === null) $primary_btn_bg_hover = $primary_btn_bg;
             $primary_btn_border_color_hover = get_theme_mod('primary_button_border_color_hover', '');
-            if ($primary_btn_border_color_hover === '' || $primary_btn_border_color_hover === null) $primary_btn_border_color_hover = $primary_btn_border_color;
 
             // Secondary button hover logic
             $secondary_btn_text_hover = get_theme_mod('secondary_button_text_color_hover', '');
-            if ($secondary_btn_text_hover === '' || $secondary_btn_text_hover === null) $secondary_btn_text_hover = $secondary_btn_text;
             $secondary_btn_bg_hover = get_theme_mod('secondary_button_bg_color_hover', '');
-            if ($secondary_btn_bg_hover === '' || $secondary_btn_bg_hover === null) $secondary_btn_bg_hover = $secondary_btn_bg;
             $secondary_btn_border_color_hover = get_theme_mod('secondary_button_border_color_hover', '');
-            if ($secondary_btn_border_color_hover === '' || $secondary_btn_border_color_hover === null) $secondary_btn_border_color_hover = $secondary_btn_border_color;
             ?>
             <?php if ($primary_btn_text !== '') : ?>
                 --primary-btn-text: <?php echo esc_attr($primary_btn_text); ?>;
