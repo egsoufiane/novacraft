@@ -553,6 +553,66 @@
 	});
 	observer.observe(document.body, { childList: true, subtree: true });
 
+    /* Typography Color */
+    // Heading
+    wp.customize('heading_color', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--heading-color', to);
+            } else {
+                document.documentElement.style.removeProperty('--heading-color');
+                removeCSSVariableFromStyleTags('heading-color');
+            }
+        });
+    });
+
+    // Link Color
+    wp.customize('link_color', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--link-color', to);
+            } else {
+                document.documentElement.style.removeProperty('--link-color');
+                removeCSSVariableFromStyleTags('link-color');
+            }
+        });
+    });
+    // Link Hover Color
+    wp.customize('link_color_hover', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--link-color-hover', to);
+            } else {
+                document.documentElement.style.removeProperty('--link-color-hover');
+                removeCSSVariableFromStyleTags('link-color-hover');
+            }
+        });
+    });
+
+    // Body Text Color
+    wp.customize('post_title_color', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--post-title-color', to);
+            } else {
+                document.documentElement.style.removeProperty('--post-title-color');
+                removeCSSVariableFromStyleTags('post-title-color');
+            }
+        });
+    });
+
+    // Post Title Color
+    wp.customize('body_text_color', function(value) {
+        value.bind(function(to) {
+            if (to) {
+                document.documentElement.style.setProperty('--body-text-color', to);
+            } else {
+                document.documentElement.style.removeProperty('--body-text-color');
+                removeCSSVariableFromStyleTags('body-text-color');
+            }
+        });
+    });
+
     // Logo handling
     wp.customize('logo_width', function(value) {
         value.bind(function(to) {

@@ -300,7 +300,6 @@ function sanitize_rgba_color($color) {
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
 function novacraft_customize_register($wp_customize) {
-
     $wp_customize->get_setting('blogname')->transport         = 'postMessage';
     $wp_customize->get_setting('blogdescription')->transport  = 'postMessage';
     $wp_customize->get_setting('header_textcolor')->transport = 'postMessage';
@@ -362,7 +361,7 @@ function novacraft_customize_register($wp_customize) {
     $wp_customize->add_section(
         'novacraft_colors',
             array(
-            'title'    => __('Theme Colors', 'novacraft'),
+            'title'    => __('Colors', 'novacraft'),
             'priority' => 30,
         )
     );
@@ -433,12 +432,27 @@ function novacraft_customize_register($wp_customize) {
         )
     );
 
+    // ===== Add "Palette" heading above the palette controls =====
+    $wp_customize->add_setting( 'palette_heading', array(
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Control(
+        $wp_customize,
+        'palette_heading',
+        array(
+            'label'    => '',
+            'section'  => 'novacraft_colors',
+            'type'     => 'hidden',
+            'description' => '<span class="novacraft-group-title">' . __( 'Theme Colors', 'novacraft' ) . '</span>',
+        )
+    ) );
+
     $wp_customize->add_control(
         new NovaCraft_Multi_Palette_Control(
             $wp_customize,
             'novacraft_theme_palette',
             array(
-                'label'    => __('Theme Colors', 'novacraft'),
+                'label'    => __('Palette', 'novacraft'),
                 'section'  => 'novacraft_colors',
                 'settings' => array('primary_color'), // Required for Customizer to show the control
                 'palette_settings' => array(
@@ -455,6 +469,124 @@ function novacraft_customize_register($wp_customize) {
             )
         )
     );
+
+    // === TYPOGRAPHY COLORS (in Theme Colors section) ===
+    // ===== Add "Typography Colors" heading above typography color controls =====
+    $wp_customize->add_setting( 'typography_colors_heading', array(
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Control(
+        $wp_customize,
+        'typography_colors_heading',
+        array(
+            'label'    => '',
+            'section'  => 'novacraft_colors',
+            'type'     => 'hidden',
+            'description' => '<span class="novacraft-group-title">' . __( 'Typography Colors', 'novacraft' ) . '</span>',
+        )
+    ) );
+
+    // Heading (H1–H6) Color
+    $wp_customize->add_setting('heading_color', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Single_Color_Control(
+        $wp_customize,
+        'heading_color',
+        array(
+            'label'    => __('Heading (H1–H6) Color', 'novacraft'),
+            'section'  => 'novacraft_colors',
+            'settings' => 'heading_color',
+        )
+    ));
+    // Link Color
+    $wp_customize->add_setting('link_color', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_setting('link_color_hover', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Dual_Color_Control(
+        $wp_customize,
+        'link_color',
+        array(
+            'label'    => __('Link Color', 'novacraft'),
+            'section'  => 'novacraft_colors',
+            'settings' => 'link_color',
+            'hover_setting'=> 'link_color_hover',
+            'input_attrs'  => array('hover_label' => __('Hover', 'novacraft')),
+            
+        )
+    ));
+    // Body Text Color
+    $wp_customize->add_setting('body_text_color', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Single_Color_Control(
+        $wp_customize,
+        'body_text_color',
+        array(
+            'label'    => __('Body Text Color', 'novacraft'),
+            'section'  => 'novacraft_colors',
+            'settings' => 'body_text_color',
+        )
+    ));
+
+     // === BACKGROUND COLORS (in Theme Colors section) ===
+    // ===== Add "Background Colors" heading above background color controls =====
+    $wp_customize->add_setting( 'background_colors_heading', array(
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Control(
+        $wp_customize,
+        'background_colors_heading',
+        array(
+            'label'    => '',
+            'section'  => 'novacraft_colors',
+            'type'     => 'hidden',
+            'description' => '<span class="novacraft-group-title">' . __( 'Background Colors', 'novacraft' ) . '</span>',
+        )
+    ) );
+
+    // Background Color
+    $wp_customize->add_setting('background_color', array(
+        'default'           => '#f0f0f0',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Single_Color_Control(
+        $wp_customize,
+        'bg_color',
+        array(
+            'label'    => __('Background Color', 'novacraft'),
+            'section'  => 'novacraft_colors',
+            'settings' => 'bg_color',
+        )
+    ));
+
+    // Content Background Color
+    $wp_customize->add_setting('content_background_color', array(
+        'default'           => '#ffffff',
+        'sanitize_callback' => 'sanitize_rgba_color',
+        'transport'         => 'postMessage',
+    ));
+    $wp_customize->add_control(new NovaCraft_Single_Color_Control(
+        $wp_customize,
+        'content_bg_color',
+        array(
+            'label'    => __('Content Background Color', 'novacraft'),
+            'section'  => 'novacraft_colors',
+            'settings' => 'content_bg_color',
+        )
+    ));
 
     // Typography Section
     $wp_customize->add_section(
@@ -1897,6 +2029,28 @@ function novacraft_customizer_css() {
             --e-global-color-contentbg: var(--wp--preset--color--content-bg);
             --e-global-color-bg: var(--wp--preset--color--bg);
 
+            /* Typography Colors */
+            <?php $post_title_color = get_theme_mod('post_title_color', ''); ?>
+            <?php if ($post_title_color !== '') : ?>
+                --post-title-color: <?php echo esc_attr($post_title_color); ?>;
+            <?php endif; ?>
+            <?php $heading_color = get_theme_mod('heading_color', ''); ?>
+            <?php if ($heading_color !== '') : ?>
+                --heading-color: <?php echo esc_attr($heading_color); ?>;
+            <?php endif; ?>
+            <?php $link_color = get_theme_mod('link_color', ''); ?>
+            <?php if ($link_color !== '') : ?>
+                --link-color: <?php echo esc_attr($link_color); ?>;
+            <?php endif; ?>
+            <?php $link_color_hover = get_theme_mod('link_color_hover', ''); ?>
+            <?php if ($link_color_hover !== '') : ?>
+                --link-color-hover: <?php echo esc_attr($link_color_hover); ?>;
+            <?php endif; ?>
+            <?php $body_text_color = get_theme_mod('body_text_color', ''); ?>
+            <?php if ($body_text_color !== '') : ?>
+                --body-text-color: <?php echo esc_attr($body_text_color); ?>;
+            <?php endif; ?>
+      
             /* Logo dimensions */
             --logo-width: <?php echo get_theme_mod('logo_width', '150'); ?>px;
 
@@ -2164,10 +2318,10 @@ function novacraft_customizer_css() {
             border-radius: 0 !important;
         }
 
-        .entry-title {
+        /* .entry-title {
             color: var(--post-title-color);
             margin-bottom: 0.5rem;
-        }
+        } */
 
         .entry-meta {
             color: var(--post-meta-color);

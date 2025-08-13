@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
 #customize-controls{
@@ -25,6 +24,32 @@
 .customize-section-title{
     margin: -12px -24px 0 -24px;
 }
+
+/* NovaCraft Customizer Visual Hierarchy */
+.novacraft-group-title {
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: none;
+    /* text-transform: uppercase; */
+    /* letter-spacing: 0.5px; */
+    margin: 24px 0 12px 0;
+    /* color: #222;
+    font-family: inherit;
+    display: block; */
+    font-style: normal;
+}
+
+/* Control labels: Palette, Heading, Link, Body Text */
+.customize-control-title {
+    /* font-size: 13px; */
+    font-weight: 500;
+    text-transform: none;
+    /* letter-spacing: 0;
+    color: #222;
+    margin-bottom: 6px;
+    font-family: inherit; */
+}
+
 .novacraft-typography-control {
     margin-bottom: 15px;
     position: relative;

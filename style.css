@@ -4,7 +4,7 @@ Theme URI: https://novacraft.com
 Author: Your Name
 Author URI: https://yourwebsite.com
 Description: A modern and versatile WordPress theme for creative professionals and businesses.
-Version: 1.0.20
+Version: 1.0.21
 Requires at least: 5.0
 Tested up to: 6.4
 Requires PHP: 7.4
@@ -68,7 +68,7 @@ html {
 body {
     font-family: var(--font-body);
     line-height: var(--body-line-height);
-    color: var(--wp--preset--color--text);
+    /* color: var(--wp--preset--color--text); */
     background-color: var(--wp--preset--color--bg);
     overflow-x: hidden;
     word-wrap: break-word;
@@ -76,12 +76,14 @@ body {
 }
 
 /* Typography */
+/* Headings */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 1rem;
-    color: var(--wp--preset--color--text);
+    /* color: var(--wp--preset--color--text); */
+    color: var(--heading-color, var(--body-text-color, var(--wp--preset--color--text)));
 }
 
 h1 { font-size: 2.5rem; }
@@ -97,17 +99,33 @@ p {
     word-break: break-word;
     overflow-wrap: break-word;
     max-width: 100%;
-    color: var(--wp--preset--color--text);
+    /* color: var(--wp--preset--color--text); */
 }
 
+/*link color*/
 a {
-    color: var(--wp--preset--color--primary);
+    /* color: var(--wp--preset--color--primary); */
+    color: var(--link-color, var(--wp--preset--color--primary));
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-a:hover {
-    color: var(--wp--preset--color--accent);
+a:hover,
+a:focus{
+    /* color: var(--wp--preset--color--accent); */
+    color: var(--link-color-hover, var(--wp--preset--color--accent));
+}
+
+/*Body text color*/
+body,
+p,
+li,
+blockquote{
+    color: var(--body-text-color, var(--wp--preset--color--text));
+}
+
+.entry-title{
+    color: var(--post-title-color, var(--heading-color, var(--body-text-color, var(--wp--preset--color--text))));
 }
 
 /* Layout */

@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 
 if (!defined('NOVACRAFT_VERSION')) {
     // Replace the version number of the theme on each release.
-    define('NOVACRAFT_VERSION', '1.0.20');
+    define('NOVACRAFT_VERSION', '1.0.21');
 }
 
 // Define theme directory URI
@@ -544,8 +544,35 @@ function novacraft_block_editor_button_vars() {
     if ($secondary_btn_bg_hover !== '') $css .= "--secondary-btn-bg-hover: {$secondary_btn_bg_hover};\n";
     $secondary_btn_border_color_hover = get_theme_mod('secondary_button_border_color_hover', '');
     if ($secondary_btn_border_color_hover !== '') $css .= "--secondary-btn-border-color-hover: {$secondary_btn_border_color_hover};\n";
+
+    // Typography Colors
+    $heading_color = get_theme_mod('heading_color', '');
+    if ($heading_color !== '') $css .= "--heading-color: {$heading_color};\n";
+    $link_color = get_theme_mod('link_color', '');
+    if ($link_color !== '') $css .= "--link-color: {$link_color};\n";
+    $link_color_hover = get_theme_mod('link_color_hover', '');
+    if ($link_color_hover !== '') $css .= "--link-color-hover: {$link_color_hover};\n";
+    $body_text_color = get_theme_mod('body_text_color', '');
+    if ($body_text_color !== '') $css .= "--body-text-color: {$body_text_color};\n";
+
+    //Post Title Color
+    $post_title_color = get_theme_mod('post_title_color', '');
+    if ($post_title_color !== '') $css .= "--post-title-color: {$post_title_color};\n";
     
-    $css .= "}";
+    $css .= "}\n";
+    // Add heading selector for block editor to use post-title-color variable chain
+    // Use .editor-post-title__input for post/page title color, headings for heading color
+    $css .= ".editor-styles-wrapper .editor-post-title__input {\n"
+        . "  color: var(--post-title-color, var(--heading-color, var(--body-text-color, var(--wp--preset--color--text))));\n"
+        . "}\n";
+    $css .= ".editor-styles-wrapper h1,\n"
+        . ".editor-styles-wrapper h2,\n"
+        . ".editor-styles-wrapper h3,\n"
+        . ".editor-styles-wrapper h4,\n"
+        . ".editor-styles-wrapper h5,\n"
+        . ".editor-styles-wrapper h6 {\n"
+        . "  color: var(--heading-color, var(--body-text-color, var(--wp--preset--color--text)));\n"
+        . "}\n";
 
     echo '<style id="novacraft-block-editor-btn-vars">' . $css . '</style>';
 }
